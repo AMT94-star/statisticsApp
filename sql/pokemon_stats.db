@@ -1,0 +1,14 @@
+CREATE TABLE entries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pokemonName TEXT,
+    seen BOOLEAN,
+    caught BOOLEAN,
+    location TEXT,
+    shiny BOOLEAN,
+    weather TEXT,
+    incense BOOLEAN,
+    incenseDuration INTEGER,
+    tag TEXT,
+    event TEXT,
+    date TEXT
+);
