@@ -38,12 +38,23 @@ public class MainMenuView {
 
         String normalStyle =
                 "-fx-background-color: #1F2937; -fx-text-fill: #c9ccd6;" +
-                        "-fx-border-color: #2a2d3a; -fx-border-radius: 10px; -fx-background-radius: 10px;" +
-                        "-fx-font-size: 14px; -fx-font-weight: 500; -fx-cursor: hand; -fx-padding: 10 20 10 20;";
+                        "-fx-border-color: #2a2d3a; " +
+                        "-fx-border-radius: 10px; " +
+                        "-fx-background-radius: 10px;" +
+                        "-fx-font-size: 14px; " +
+                        "-fx-font-weight: 500; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-padding: 10 20 10 20;";
         String hoverStyle =
-                "-fx-background-color: #273449; -fx-text-fill: #e8eaf0;" +
-                        "-fx-border-color: #3b82f6; -fx-border-radius: 10px; -fx-background-radius: 10px;" +
-                        "-fx-font-size: 14px; -fx-font-weight: 500; -fx-cursor: hand; -fx-padding: 10 20 10 20;";
+                "-fx-background-color: #273449; " +
+                        "-fx-text-fill: #e8eaf0;" +
+                        "-fx-border-color: #3b82f6; " +
+                        "-fx-border-radius: 10px; " +
+                        "-fx-background-radius: 10px;" +
+                        "-fx-font-size: 14px; " +
+                        "-fx-font-weight: 500; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-padding: 10 20 10 20;";
 
         for (Button btn : new Button[]{addEntryBtn, searchPokemonBtn, searchTagBtn, overallStatsBtn}) {
             btn.setPrefWidth(btnWidth);

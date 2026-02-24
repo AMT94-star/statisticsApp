@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EntryService {
 
-    private static final EntryService INSTANCE = new EntryService(new SqlEntryRepository());
+    private static final EntryService instance = new EntryService(new SqlEntryRepository());
     private final EntryRepository repo;
 
     private EntryService(EntryRepository repo) {
@@ -17,7 +17,7 @@ public class EntryService {
     }
 
     public static EntryService getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     public void add(PokemonEntry entry) {
@@ -39,7 +39,7 @@ public class EntryService {
         repo.insertWithId(entry);
     }
 
-    //Hämtar alla entries oavsett år, används av OverallStatsView
+    //hämtar alla entries oavsett år, används av OverallStatsView
     public List<PokemonEntry> getAllEntries() {
         return repo.findAll();
     }

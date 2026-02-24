@@ -17,7 +17,7 @@ public class AppHeader {
     public static HBox create(BorderPane appRoot, String titleText, String subtitleText) {
 
         Label title = new Label(titleText);
-        title.getStyleClass().add("app-title");
+        title.getStyleClass().add("app title");
 
         Button backBtn = new Button("← Main Menu");
         backBtn.getStyleClass().add("secondary");
@@ -33,7 +33,7 @@ public class AppHeader {
         HBox.setHgrow(left, Priority.ALWAYS);
         header.setAlignment(Pos.CENTER_LEFT);
         header.setPadding(new Insets(8, 16, 8, 16));
-        header.getStyleClass().add("top-bar");
+        header.getStyleClass().add("top bar");
 
         appRoot.centerProperty().addListener((obs, oldCenter, newCenter) -> {
             if (newCenter != null && lightMode) {
@@ -99,10 +99,10 @@ public class AppHeader {
     static void applyTheme(BorderPane appRoot, boolean light) {
         if (appRoot.getScene() == null) return;
         if (light) {
-            appRoot.getScene().getRoot().getStyleClass().remove("light-mode");
-            appRoot.getScene().getRoot().getStyleClass().add("light-mode");
+            appRoot.getScene().getRoot().getStyleClass().remove("light mode");
+            appRoot.getScene().getRoot().getStyleClass().add("light mode");
         } else {
-            appRoot.getScene().getRoot().getStyleClass().remove("light-mode");
+            appRoot.getScene().getRoot().getStyleClass().remove("light mode");
         }
         updateStyles(appRoot.getScene().getRoot(), light);
     }

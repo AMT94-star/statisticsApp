@@ -44,8 +44,12 @@ public class SearchPokemonDashboardView {
         Button importBtn = new Button("Import Excel");
         loadBtn.getStyleClass().add("primary");
         addBtn.getStyleClass().add("primary");
-        String secStyle = "-fx-background-color: #1F2937; -fx-text-fill: #9ca3af; " +
-                "-fx-border-color: #374151; -fx-border-radius: 6px; -fx-background-radius: 6px; -fx-cursor: hand;";
+        String secStyle = "-fx-background-color: #1F2937; " +
+                "-fx-text-fill: #9ca3af; " +
+                "-fx-border-color: #374151; " +
+                "-fx-border-radius: 6px; " +
+                "-fx-background-radius: 6px; " +
+                "-fx-cursor: hand;";
         clearBtn.setStyle(secStyle);
         exportBtn.setStyle(secStyle);
         importBtn.setStyle(secStyle);
@@ -68,7 +72,8 @@ public class SearchPokemonDashboardView {
         controls.setAlignment(Pos.CENTER_LEFT);
         controls.setPadding(new Insets(8, 16, 8, 16));
         controls.setStyle("-fx-background-color: #111827;" +
-                "-fx-border-color: transparent transparent #2a2d3a transparent; -fx-border-width: 0 0 1 0;");
+                "-fx-border-color: transparent transparent #2a2d3a transparent; " +
+                "-fx-border-width: 0 0 1 0;");
 
         root.setTop(new VBox(header, controls));
 
@@ -77,7 +82,8 @@ public class SearchPokemonDashboardView {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         for (int m = 1; m <= 12; m++) {
             String n = Month.of(m).name();
-            tabPane.getTabs().add(new Tab(n.charAt(0) + n.substring(1).toLowerCase()));
+            tabPane.getTabs().add(new Tab(n.charAt(0) +
+                    n.substring(1).toLowerCase()));
         }
         Tab yearTab = new Tab("Year");
         tabPane.getTabs().add(yearTab);

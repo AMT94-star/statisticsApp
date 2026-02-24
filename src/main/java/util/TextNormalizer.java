@@ -5,14 +5,14 @@ import java.util.Set;
 public class TextNormalizer {
 
     //ord som alltid ska vara caps
-    private static final Set<String> ALWAYS_UPPER = Set.of(
+    private static final Set<String> alwaysUpper = Set.of(
             "GO", "IV", "CP", "XP", "EX",
             "CD", "GBL",
             "XS", "S", "M", "L", "XL", "XXL"
     );
 
     //ord som ska ha specifik stavning
-    private static final Set<String> SPECIAL_CASE = Set.of(
+    private static final Set<String> specialCase = Set.of(
             "PVP",
             "SHADOW",
             "MEGA",
@@ -63,11 +63,11 @@ public class TextNormalizer {
 
         String upper = t.toUpperCase();
 
-        if (ALWAYS_UPPER.contains(upper)) {
+        if (alwaysUpper.contains(upper)) {
             return upper;
         }
 
-        if (SPECIAL_CASE.contains(upper)) {
+        if (specialCase.contains(upper)) {
             return switch (upper) {
                 case "PVP" -> "PvP";
                 case "SHADOW" -> "Shadow";

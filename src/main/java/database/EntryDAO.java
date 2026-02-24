@@ -6,9 +6,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.time.LocalDate.parse;
 
 public class EntryDAO {
 
@@ -147,7 +148,7 @@ public class EntryDAO {
     private static PokemonEntry mapRow(ResultSet rs) throws SQLException {
         return new PokemonEntry(
                 rs.getInt("id"),
-                rs.getString("date") == null ? null : LocalDate.parse(rs.getString("date")),
+                rs.getString("date") == null ? null : parse(rs.getString("date")),
                 rs.getString("day"),
                 rs.getString("time"),
                 rs.getString("pokemonName"),

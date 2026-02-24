@@ -18,7 +18,7 @@ public class EntryDetailsPanel {
         grid.setPadding(new Insets(10));
 
         Label title = new Label("Selected Entry");
-        title.getStyleClass().add("section-title");
+        title.getStyleClass().add("section title");
 
         TextField time = new TextField();
         TextField pokemon = new TextField();

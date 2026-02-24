@@ -7,9 +7,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.time.LocalDate.parse;
+import static java.util.stream.Collectors.joining;
 
 public class SqlEntryRepository implements EntryRepository {
 
@@ -81,7 +83,7 @@ public class SqlEntryRepository implements EntryRepository {
     @Override
     public void setTagForIds(List<Integer> ids, String tag) {
         if (ids == null || ids.isEmpty()) return;
-        String in = ids.stream().map(x -> "?").collect(java.util.stream.Collectors.joining(","));
+        String in = ids.stream().map(x -> "?").collect(joining(","));
         String sql = "UPDATE entries SET tag=? WHERE id IN (" + in + ")";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -96,7 +98,7 @@ public class SqlEntryRepository implements EntryRepository {
     @Override
     public void clearTagForIds(List<Integer> ids) {
         if (ids == null || ids.isEmpty()) return;
-        String in = ids.stream().map(x -> "?").collect(java.util.stream.Collectors.joining(","));
+        String in = ids.stream().map(x -> "?").collect(joining(","));
         String sql = "UPDATE entries SET tag='' WHERE id IN (" + in + ")";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -222,7 +224,7 @@ public class SqlEntryRepository implements EntryRepository {
         return tags;
     }
 
-    // alla unika pokémon i bokstavsordning
+    // alla unika pokemon i bokstavsordning
     @Override
     public List<String> findDistinctPokemonNames() {
         List<String> names = new ArrayList<>();
@@ -266,7 +268,7 @@ public class SqlEntryRepository implements EntryRepository {
     private PokemonEntry mapRow(ResultSet rs) throws SQLException {
         return new PokemonEntry(
                 rs.getInt("id"),
-                rs.getString("date") == null ? null : LocalDate.parse(rs.getString("date")),
+                rs.getString("date") == null ? null : parse(rs.getString("date")),
                 rs.getString("day"),
                 rs.getString("time"),
                 rs.getString("pokemonName"),

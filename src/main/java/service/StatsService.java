@@ -6,14 +6,16 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 public class StatsService {
 
-    private static final StatsService INSTANCE = new StatsService();
+    private static final StatsService instance = new StatsService();
 
     public static StatsService getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     public StatsSnapshot compute(List<PokemonEntry> entries) {
@@ -36,18 +38,18 @@ public class StatsService {
         Map<String, Long> tagCounts = entries.stream()
                 .map(e -> safe(e.getTag()).trim())
                 .map(t -> t.isBlank() ? "Untagged" : t)
-                .collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+                .collect(groupingBy(s -> s, counting()));
 
         Map<LocalDate, Long> dailyCounts = entries.stream()
                 .map(PokemonEntry::getDate)
                 .filter(Objects::nonNull)
-                .collect(Collectors.groupingBy(d -> d, Collectors.counting()));
+                .collect(groupingBy(d -> d, counting()));
 
-        // top Pokémon counts
+        //top pokie counts
         Map<String, Long> pokemonCounts = entries.stream()
                 .map(e -> safe(e.getPokemonName()).trim())
                 .map(n -> n.isBlank() ? "Unknown" : n)
-                .collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+                .collect(groupingBy(s -> s, counting()));
 
         return new StatsSnapshot(total, caught, shiny, shinyRate, avgCp, tagCounts, dailyCounts, pokemonCounts);
     }

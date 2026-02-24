@@ -1,13 +1,12 @@
 package ui;
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.KeyCode;
 import javafx.util.converter.IntegerStringConverter;
 import model.PokemonEntry;
 import service.EntryService;
@@ -16,9 +15,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
+import static javafx.scene.control.ContentDisplay.GRAPHIC_ONLY;
+import static javafx.scene.control.ContentDisplay.TEXT_ONLY;
+import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
+import static javafx.scene.input.KeyCode.ESCAPE;
+
 public class Tables {
 
-    private static final List<String> WEATHER_OPTIONS = List.of(
+    private static final List<String> weatherOptions = List.of(
             "Sunny/Clear", "Fog", "Cloudy", "Rainy", "Snow", "Partly Cloudy", "Windy"
     );
 
@@ -40,7 +46,7 @@ public class Tables {
         TableColumn<PokemonEntry, String> colDate = new TableColumn<>("Date");
         colDate.setCellValueFactory(cd -> {
             var d = cd.getValue().getDate();
-            return new javafx.beans.property.SimpleStringProperty(d == null ? "" : d.toString());
+            return new SimpleStringProperty(d == null ? "" : d.toString());
         });
         colDate.setPrefWidth(95);
 
@@ -50,20 +56,24 @@ public class Tables {
         colDay.setPrefWidth(85);
 
         //tid
-        TableColumn<PokemonEntry, String> colTime = editableStringColumn("Time", "time", reloadCurrentTab);
+        TableColumn<PokemonEntry, String> colTime = editableStringColumn(
+                "Time", "time", reloadCurrentTab);
         colTime.setPrefWidth(75);
 
         //pokie
-        TableColumn<PokemonEntry, String> colPokemon = editableStringColumn("Pokémon", "pokemonName", reloadCurrentTab);
+        TableColumn<PokemonEntry, String> colPokemon = editableStringColumn(
+                "Pokémon", "pokemonName", reloadCurrentTab);
         colPokemon.setPrefWidth(100);
 
         //cp
         TableColumn<PokemonEntry, Integer> colCP = new TableColumn<>("CP");
         colCP.setCellValueFactory(new PropertyValueFactory<>("cp"));
         colCP.setEditable(true);
-        colCP.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        colCP.setCellFactory(forTableColumn(
+                new IntegerStringConverter()));
         colCP.setOnEditCommit(ev -> {
-            ev.getRowValue().setCp(ev.getNewValue() == null ? 0 : ev.getNewValue());
+            ev.getRowValue().setCp(ev.getNewValue() ==
+                    null ? 0 : ev.getNewValue());
             EntryService.getInstance().update(ev.getRowValue());
         });
         colCP.setPrefWidth(60);
@@ -107,7 +117,7 @@ public class Tables {
         colWeather.setCellValueFactory(new PropertyValueFactory<>("weather"));
         colWeather.setEditable(true);
         colWeather.setCellFactory(ComboBoxTableCell.forTableColumn(
-                javafx.collections.FXCollections.observableArrayList(WEATHER_OPTIONS)
+                observableArrayList(weatherOptions)
         ));
         colWeather.setOnEditCommit(ev -> {
             ev.getRowValue().setWeather(ev.getNewValue());
@@ -116,11 +126,13 @@ public class Tables {
         colWeather.setPrefWidth(105);
 
         //park
-        TableColumn<PokemonEntry, String> colPark = editableStringColumn("Park", "park", reloadCurrentTab);
+        TableColumn<PokemonEntry, String> colPark = editableStringColumn(
+                "Park", "park", reloadCurrentTab);
         colPark.setPrefWidth(90);
 
         //location
-        TableColumn<PokemonEntry, String> colLocation = editableStringColumn("Location", "location", reloadCurrentTab);
+        TableColumn<PokemonEntry, String> colLocation = editableStringColumn(
+                "Location", "location", reloadCurrentTab);
         colLocation.setPrefWidth(90);
         colLocation.setMaxWidth(130);
 
@@ -160,7 +172,7 @@ public class Tables {
         TableColumn<PokemonEntry, Integer> colIncDur = new TableColumn<>("Inc.Dur");
         colIncDur.setCellValueFactory(new PropertyValueFactory<>("incenseDuration"));
         colIncDur.setEditable(true);
-        colIncDur.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        colIncDur.setCellFactory(forTableColumn(new IntegerStringConverter()));
         colIncDur.setOnEditCommit(ev -> {
             ev.getRowValue().setIncenseDuration(ev.getNewValue() == null ? 0 : ev.getNewValue());
             EntryService.getInstance().update(ev.getRowValue());
@@ -183,7 +195,7 @@ public class Tables {
                     shinyProps.remove(entry);
                     incenseProps.remove(entry);
                     reloadCurrentTab.run();
-                    ButtonType undo = new ButtonType("Undo", ButtonBar.ButtonData.OK_DONE);
+                    ButtonType undo = new ButtonType("Undo", OK_DONE);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Entry deleted.", undo, ButtonType.CLOSE);
                     alert.setHeaderText(null);
                     alert.showAndWait().ifPresent(bt -> {
@@ -220,7 +232,7 @@ public class Tables {
         TableColumn<PokemonEntry, String> col = new TableColumn<>(title);
         col.setCellValueFactory(new PropertyValueFactory<>(property));
         col.setEditable(true);
-        col.setCellFactory(TextFieldTableCell.forTableColumn());
+        col.setCellFactory(forTableColumn());
         col.setOnEditCommit(ev -> {
             PokemonEntry e = ev.getRowValue();
             String v = ev.getNewValue();
@@ -247,7 +259,7 @@ public class Tables {
                 createTextField();
                 setText(null);
                 setGraphic(textField);
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setContentDisplay(GRAPHIC_ONLY);
                 textField.requestFocus();
                 textField.selectAll();
             }
@@ -258,7 +270,7 @@ public class Tables {
             super.cancelEdit();
             setText(getItem());
             setGraphic(null);
-            setContentDisplay(ContentDisplay.TEXT_ONLY);
+            setContentDisplay(TEXT_ONLY);
         }
 
         @Override
@@ -273,11 +285,11 @@ public class Tables {
                 if (textField != null) textField.setText(item);
                 setText(null);
                 setGraphic(textField);
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setContentDisplay(GRAPHIC_ONLY);
             } else {
                 setText(item);
                 setGraphic(null);
-                setContentDisplay(ContentDisplay.TEXT_ONLY);
+                setContentDisplay(TEXT_ONLY);
             }
         }
 
@@ -286,7 +298,7 @@ public class Tables {
             AutoComplete.bind(textField, EntryService.getInstance().getDistinctTags());
             textField.setOnAction(e -> commitEdit(textField.getText()));
             textField.setOnKeyPressed(e -> {
-                if (e.getCode() == KeyCode.ESCAPE) cancelEdit();
+                if (e.getCode() == ESCAPE) cancelEdit();
             });
             textField.focusedProperty().addListener((obs, was, isNow) -> {
                 if (!isNow && isEditing()) commitEdit(textField.getText());

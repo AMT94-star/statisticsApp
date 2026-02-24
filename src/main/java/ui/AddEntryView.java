@@ -83,7 +83,7 @@ public class AddEntryView {
         grid.add(errorLabel, 0, row, 2, 1);
         row++;
 
-        Button saveBtn = new Button("💾  Save Entry");
+        Button saveBtn = new Button("Save Entry");
         saveBtn.setStyle(
                 "-fx-background-color: #1d4ed8; -fx-text-fill: #eff6ff; " +
                         "-fx-font-weight: 700; -fx-font-size: 13px; " +

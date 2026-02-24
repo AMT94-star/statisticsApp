@@ -29,7 +29,7 @@ public class AutoComplete {
             }
 
             List<String> matches = source.stream()
-                    .filter(s -> s != null && s.toLowerCase().contains(query)) // ✅ case-insensitive
+                    .filter(s -> s != null && s.toLowerCase().contains(query)) // case insensitive
                     .limit(8)
                     .collect(Collectors.toList());
 

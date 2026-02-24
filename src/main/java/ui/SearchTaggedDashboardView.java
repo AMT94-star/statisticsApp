@@ -5,15 +5,18 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import model.PokemonEntry;
 import service.EntryService;
 import service.ExcelService;
 
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SearchTaggedDashboardView {
@@ -122,7 +125,7 @@ public class SearchTaggedDashboardView {
             String tag = tagCombo.getEditor().getText();
             int year = yearSpinner.getValue();
 
-            java.util.Arrays.fill(tabDirty, true);
+            Arrays.fill(tabDirty, true);
 
             int activeIdx = tabPane.getSelectionModel().getSelectedIndex();
             if (activeIdx < 12) {
@@ -202,8 +205,11 @@ public class SearchTaggedDashboardView {
             try {
                 javafx.stage.FileChooser fc = new javafx.stage.FileChooser();
                 fc.setTitle("Import from Excel");
-                fc.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Excel (*.xlsx)", "*.xlsx"));
+                fc.getExtensionFilters().add(
+                        new javafx.stage.FileChooser.ExtensionFilter(
+                                "Excel (*.xlsx)", "*.xlsx"));
                 java.io.File file = fc.showOpenDialog(root.getScene().getWindow());
+
                 if (file == null) return;
                 ExcelService.ImportResult res = ExcelService.getInstance().importEntries(file.toPath());
                 String msg = "Inserted: " + res.inserted() + "\nSkipped: " + res.skipped();
@@ -229,7 +235,7 @@ public class SearchTaggedDashboardView {
             }
         });
 
-        int currentMonth = java.time.LocalDate.now().getMonthValue();
+        int currentMonth = LocalDate.now().getMonthValue();
         tabPane.getSelectionModel().select(currentMonth - 1);
         reloadAllTabs.run();
 
@@ -252,7 +258,7 @@ public class SearchTaggedDashboardView {
                 if (f != null) return f;
             }
         }
-        if (node instanceof javafx.scene.Parent p) {
+        if (node instanceof Parent p) {
             for (Node child : p.getChildrenUnmodifiable()) {
                 TableView<?> f = findFirstTableView(child);
                 if (f != null) return f;

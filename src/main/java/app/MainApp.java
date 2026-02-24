@@ -5,10 +5,11 @@ import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import ui.MainMenuView;
 import ui.UsernameSetupView;
+
+import static javafx.stage.Screen.getPrimary;
 
 public class MainApp extends Application {
 
@@ -20,7 +21,7 @@ public class MainApp extends Application {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: #111827;");
 
-        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        Rectangle2D bounds = getPrimary().getVisualBounds();
         double width = bounds.getWidth() * 0.9;
         double height = bounds.getHeight() * 0.9;
 

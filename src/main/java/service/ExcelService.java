@@ -3,7 +3,6 @@ package service;
 import model.PokemonEntry;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import util.TextNormalizer;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,12 +14,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
+import static org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted;
+import static org.apache.poi.ss.usermodel.WorkbookFactory.create;
+import static util.TextNormalizer.smartTitle;
+
 public class ExcelService {
 
-    private static final ExcelService INSTANCE = new ExcelService();
+    private static final ExcelService instance = new ExcelService();
 
     public static ExcelService getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     public void exportEntries(Path file, List<PokemonEntry> entries) throws Exception {
@@ -29,9 +33,12 @@ public class ExcelService {
 
             Row h = sheet.createRow(0);
             String[] headers = {
-                    "Id", "Date", "Day", "Time", "Pokemon", "CP", "Caught", "Shiny",
-                    "Weather", "Park", "Location", "Tag", "Event", "Incense", "IncenseDuration"
+                    "Id", "Date", "Day", "Time",
+                    "Pokemon", "CP", "Caught", "Shiny",
+                    "Weather", "Park", "Location",
+                    "Tag", "Event", "Incense", "IncenseDuration"
             };
+
             for (int i = 0; i < headers.length; i++) h.createCell(i).setCellValue(headers[i]);
 
             int r = 1;
@@ -69,7 +76,7 @@ public class ExcelService {
         int skipped = 0;
         List<String> errors = new ArrayList<>();
 
-        try (Workbook wb = WorkbookFactory.create(new FileInputStream(file.toFile()))) {
+        try (Workbook wb = create(new FileInputStream(file.toFile()))) {
 
             for (int s = 0; s < wb.getNumberOfSheets(); s++) {
                 Sheet sheet = wb.getSheetAt(s);
@@ -116,13 +123,13 @@ public class ExcelService {
                         String pokemon = readString(row, col, "pokemon");
                         if (pokemon.isBlank()) pokemon = readString(row, col, "bird");
                         if (pokemon.isBlank()) pokemon = readString(row, col, "name");
-                        pokemon = TextNormalizer.smartTitle(pokemon);
+                        pokemon = smartTitle(pokemon);
 
                         int cp = readInt(row, col, "cp");
                         boolean shiny = readBoolean(row, col, "shiny");
                         boolean caught = readBoolean(row, col, "caught");
 
-                        String tag = TextNormalizer.smartTitle(readString(row, col, "tag"));
+                        String tag = smartTitle(readString(row, col, "tag"));
                         String event = readString(row, col, "event");
 
                         boolean incense = readBoolean(row, col, "incense");
@@ -188,7 +195,7 @@ public class ExcelService {
         Cell cell = row.getCell(idx);
         if (cell == null) return null;
 
-        if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+        if (cell.getCellType() == NUMERIC && isCellDateFormatted(cell)) {
             return cell.getLocalDateTimeCellValue().toLocalDate();
         }
 
@@ -222,7 +229,7 @@ public class ExcelService {
         if (idx == null) return 0;
         Cell cell = row.getCell(idx);
         if (cell == null) return 0;
-        if (cell.getCellType() == CellType.NUMERIC) return (int) Math.round(cell.getNumericCellValue());
+        if (cell.getCellType() == NUMERIC) return (int) Math.round(cell.getNumericCellValue());
         String s = cell.toString().trim();
         if (s.isBlank()) return 0;
         try {
@@ -245,7 +252,7 @@ public class ExcelService {
         if (w == null) return "";
         String t = w.trim();
         if (t.equalsIgnoreCase("sunny") || t.equalsIgnoreCase("clear")) return "Sunny/Clear";
-        return TextNormalizer.smartTitle(t);
+        return smartTitle(t);
     }
 
     //gör THURSDAY till Thursday
