@@ -8,7 +8,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class AutoComplete {
 
@@ -31,7 +32,7 @@ public class AutoComplete {
             List<String> matches = source.stream()
                     .filter(s -> s != null && s.toLowerCase().contains(query)) // case insensitive
                     .limit(8)
-                    .collect(Collectors.toList());
+                    .collect(toList());
 
             if (matches.isEmpty()) {
                 menu.hide();
