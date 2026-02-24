@@ -14,35 +14,43 @@ public class DatabaseManager {
 
     public static void initializeDatabase() {
 
-        String sql = """
+        String createTable = """
                 CREATE TABLE IF NOT EXISTS entries (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    date TEXT,
-                    day TEXT,
-                    time TEXT,
-                    pokemonName TEXT,
-                    cp INTEGER,
-                    caught BOOLEAN,
-                    shiny BOOLEAN,
-                    weather TEXT,
-                    park TEXT,
-                    location TEXT,
-                    tag TEXT,
-                    event TEXT,
-                    incense BOOLEAN,
-                    incenseDuration INTEGER
+                    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+                    date             TEXT,
+                    day              TEXT,
+                    time             TEXT,
+                    pokemonName      TEXT,
+                    cp               INTEGER,
+                    caught           BOOLEAN,
+                    shiny            BOOLEAN,
+                    weather          TEXT,
+                    park             TEXT,
+                    location         TEXT,
+                    tag              TEXT,
+                    event            TEXT,
+                    incense          BOOLEAN,
+                    incenseDuration  INTEGER
                 );
                 """;
 
         try (Connection conn = getConnection();
              var stmt = conn.createStatement()) {
 
-            stmt.execute(sql);
-            System.out.println("Database ready!");
+            stmt.execute(createTable);
 
+            // normalisera day kolumnen
+            stmt.execute("""
+                    UPDATE entries
+                    SET day = upper(substr(day,1,1)) || lower(substr(day,2))
+                    WHERE day IS NOT NULL
+                      AND day <> ''
+                      AND day = upper(day)
+                    """);
+
+            System.out.println("Database ready!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 }

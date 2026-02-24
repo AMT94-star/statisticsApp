@@ -2,45 +2,50 @@ package app;
 
 import database.DatabaseManager;
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import ui.MainMenuView;
-
+import ui.UsernameSetupView;
 
 public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) {
 
-        // Starta databasen när appen startar
         DatabaseManager.initializeDatabase();
 
-        TabPane tabPane = new TabPane();
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: #111827;");
 
-        BorderPane mainMenuRoot = new BorderPane();
-        mainMenuRoot.setCenter(MainMenuView.create(mainMenuRoot));
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        double width = bounds.getWidth() * 0.9;
+        double height = bounds.getHeight() * 0.9;
 
-        Tab mainMenuTab = new Tab("Main Menu", mainMenuRoot);
-        Tab monthlyTab = new Tab("Monthly Statistics");
-        Tab yearlyTab = new Tab("Year Statistics");
+        Scene scene = new Scene(root, width, height);
+        scene.getStylesheets().add(
+                MainApp.class.getResource("/styles/app.css").toExternalForm()
+        );
 
-        mainMenuTab.setClosable(false);
-        monthlyTab.setClosable(false);
-        yearlyTab.setClosable(false);
-
-        tabPane.getTabs().addAll(mainMenuTab, monthlyTab, yearlyTab);
-
-        Scene scene = new Scene(tabPane, 1200, 800);
-
-        stage.setTitle("Kevin's Pokémon Statistics");
+        stage.setTitle("");
+        stage.setMinWidth(1000);
+        stage.setMinHeight(700);
+        stage.centerOnScreen();
         stage.setScene(scene);
         stage.show();
+
+        if (UsernameSetupView.getSavedUsername() == null) {
+            root.setCenter(UsernameSetupView.create(() ->
+                    root.setCenter(MainMenuView.create(root))
+            ));
+        } else {
+            root.setCenter(MainMenuView.create(root));
+        }
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }
